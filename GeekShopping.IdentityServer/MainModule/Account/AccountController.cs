@@ -140,7 +140,7 @@ namespace IdentityServerHost.Quickstart.UI
 
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
+                    AuthenticationProperties props = null!;
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
                     {
                         props = new AuthenticationProperties
@@ -226,7 +226,7 @@ namespace IdentityServerHost.Quickstart.UI
             // build a model so the logged out page knows what to display
             var vm = await BuildLoggedOutViewModelAsync(model.LogoutId);
 
-            if (User?.Identity.IsAuthenticated == true)
+            if (User?.Identity!.IsAuthenticated == true)
             {
                 // delete local authentication cookie
                 await _signInManager.SignOutAsync();
@@ -241,7 +241,7 @@ namespace IdentityServerHost.Quickstart.UI
                 // build a return URL so the upstream provider will redirect back
                 // to us after the user has logged out. this allows us to then
                 // complete our single sign-out processing.
-                string url = Url.Action("Logout", new { logoutId = vm.LogoutId });
+                string url = Url.Action("Logout", new { logoutId = vm.LogoutId })!;
 
                 // this triggers a redirect to the external provider for sign-out
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
@@ -268,7 +268,7 @@ namespace IdentityServerHost.Quickstart.UI
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null!)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -366,12 +366,12 @@ namespace IdentityServerHost.Quickstart.UI
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
+                    Username = context?.LoginHint!,
                 };
 
                 if (!local)
                 {
-                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
+                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context!.IdP } };
                 }
 
                 return vm;
@@ -407,7 +407,7 @@ namespace IdentityServerHost.Quickstart.UI
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
+                Username = context?.LoginHint!,
                 ExternalProviders = providers.ToArray()
             };
         }
@@ -427,12 +427,12 @@ namespace IdentityServerHost.Quickstart.UI
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
+                    Username = context?.LoginHint!,
                 };
 
                 if (!local)
                 {
-                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
+                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context!.IdP } };
                 }
 
                 return vm;
@@ -477,7 +477,7 @@ namespace IdentityServerHost.Quickstart.UI
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
+                Username = context?.LoginHint!,
                 ExternalProviders = providers.ToArray()
             };
         }
@@ -494,7 +494,7 @@ namespace IdentityServerHost.Quickstart.UI
         {
             var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt };
 
-            if (User?.Identity.IsAuthenticated != true)
+            if (User?.Identity!.IsAuthenticated != true)
             {
                 // if the user is not authenticated, then just show logged out page
                 vm.ShowLogoutPrompt = false;
@@ -522,13 +522,13 @@ namespace IdentityServerHost.Quickstart.UI
             var vm = new LoggedOutViewModel
             {
                 AutomaticRedirectAfterSignOut = AccountOptions.AutomaticRedirectAfterSignOut,
-                PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
-                ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
-                SignOutIframeUrl = logout?.SignOutIFrameUrl,
+                PostLogoutRedirectUri = logout?.PostLogoutRedirectUri!,
+                ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId! : logout?.ClientName!,
+                SignOutIframeUrl = logout?.SignOutIFrameUrl!,
                 LogoutId = logoutId
             };
 
-            if (User?.Identity.IsAuthenticated == true)
+            if (User?.Identity!.IsAuthenticated == true)
             {
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider)
