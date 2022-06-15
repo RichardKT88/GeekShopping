@@ -1,15 +1,12 @@
 ﻿using GeekShopping.CartAPI.Model.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GeekShopping.CartAPI.Model
+namespace GeekShopping.CartAPI.Data.ValueObjects
 {
-    [Table("cart_header")]
-    public class CartHeader : BaseEntity 
+    public class CartHeaderVO
     {
-        [Column("user_id")]
+        public long Id { get; set; }
         public string? UserId { get; set; }
-
-        [Column("coupon_code")]
         public string? CouponCode { get; set; }
     }
     
