@@ -18,7 +18,7 @@ namespace GeekShopping.ProductAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductVO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductVO>>> FindAll()
         {
             var products = await _productRepository.FindAll();
             return Ok(products);
@@ -26,7 +26,7 @@ namespace GeekShopping.ProductAPI.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<ProductVO>> Get(long id) 
+        public async Task<ActionResult<ProductVO>> FindById(long id) 
         {
             var product = await _productRepository.FindById(id);
             if (product == null) return NotFound();
