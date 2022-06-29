@@ -14,6 +14,7 @@ namespace GeekShopping.CartAPI.Controllers
             _cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
         }
 
+
         [HttpGet("find-cart/{id}")]
         public async Task<ActionResult<IEnumerable<CartVO>>> FindById(string id)
         {
@@ -43,6 +44,22 @@ namespace GeekShopping.CartAPI.Controllers
         {
             var status = await _cartRepository.RemoveFromCart(id);
             if (!status) return BadRequest();
+            return Ok(status);
+        }
+
+        [HttpPost("apply-coupon")]
+        public async Task<ActionResult<CartVO>> ApplyCoupon(CartVO vo)
+        {
+            var status = await _cartRepository.ApplyCoupon(vo.CartHeader!.UserId!, vo.CartHeader!.CouponCode!);
+            if (!status) return NotFound();
+            return Ok(status);
+        }
+
+        [HttpDelete("remove-coupon/{userId}")]
+        public async Task<ActionResult<CartVO>> ApplyCoupon(string userId)
+        {
+            var status = await _cartRepository.RemoveCoupon(userId);
+            if (!status) return NotFound();
             return Ok(status);
         }
     }
