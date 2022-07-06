@@ -1,13 +1,14 @@
-﻿using GeekShopping.CartAPI.Data.ValueObjects;
-using GeekShopping.MessageBus;
+﻿using GeekShopping.MessageBus;
+using System;
+using System.Collections.Generic;
 
-namespace GeekShopping.CartAPI.Messages
+namespace GeekShopping.OrderAPI.Messages
 {
     public class CheckoutHeaderVO : BaseMessage
     {
         public string? UserId { get; set; }
         public string? CouponCode { get; set; }
-        public decimal? PurchaseAmount { get; set; }
+        public decimal PurchaseAmount { get; set; }
         public decimal DiscountAmount { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
