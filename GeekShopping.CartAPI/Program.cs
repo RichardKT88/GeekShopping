@@ -26,6 +26,8 @@ builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpClient<ICouponRepository, CouponRepository>(s => s.BaseAddress = new Uri(builder.Configuration["ServiceUrls: CouponAPI"]));
+
 //Adicionando as config de segurança
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>

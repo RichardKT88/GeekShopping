@@ -86,7 +86,12 @@ namespace GeekShopping.Web.Controllers
 
             var response = await _cartService.Checkout(model.CartHeader!, token!);
 
-            if (response != null)
+            if (response != null && response.GetType() == typeof(string))
+            {
+                TempData["Error"] = response;
+                return RedirectToAction(nameof(Checkout));
+            }
+            else if (response != null)
             {
                 return RedirectToAction(nameof(Confirmation));
             }
@@ -111,7 +116,7 @@ namespace GeekShopping.Web.Controllers
                 if (!string.IsNullOrEmpty(response.CartHeader.CouponCode))
                 {
                     var coupon = await _couponService.
-                        GetCoupon(response.CartHeader.CouponCode, token);
+                        GetCoupon(response.CartHeader.CouponCode, token!);
                     if (coupon?.CouponCode != null)
                     {
                         response.CartHeader.DiscountAmount = coupon.DiscountAmount;
